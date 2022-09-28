@@ -48,8 +48,7 @@ private:
 	float m_fieldY;
 
 	// ƒWƒƒƒ“ƒvŠÖ˜A
-	bool m_isJumpUp;		// ã¸’†
-	bool m_isJumpDown;		// ‰º~’†
+	
 
 	bool m_isDead;
 };

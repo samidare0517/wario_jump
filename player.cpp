@@ -2,13 +2,25 @@
 #include "game.h"
 #include "player.h"
 
+namespace
+{
+	// キャラクターのサイズ
+	constexpr float kSizeX = 128.0f;
+	constexpr float kSizeY = 128.0f;
+
+	// ジャンプ力
+	constexpr float kJumpAcc = -32.0f;
+
+	// 重力
+	constexpr float kGravity = 2.0f;
+}
+
+
 Player::Player()
 {
 	m_handle = -1;
 	m_fieldY = 0.0f;
 
-	m_isJumpUp = false;
-	m_isJumpDown = false;
 
 	m_isDead = false;
 }
@@ -32,37 +44,29 @@ void Player:: setup(float fieldY)
 
 void Player::update()
 {
-//	m_pos += m_vec;
+	if (m_isDead)return;
+
+	m_pos += m_vec;
+
+	// 地面との当たり
+
+	bool isField = false;
+	if (m_pos.y > m_fieldY - m_graphSize.y)
+	{
+		m_pos.y = m_fieldY - m_graphSize.y;
+		isField = true;
+	}
 
 	// キー入力処理
 	int padState = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	if (padState & PAD_INPUT_1)
-	{
-		m_isJumpUp = true;
-
-	}
-
-	if (m_isJumpUp)
-	{
-		m_pos.y -= 4.0f;
-		
-		if (m_pos.y <= 64.0f)
+	{		
+		if (isField)
 		{
-			m_isJumpUp = false;
-			m_isJumpDown = true;
+			m_vec.y = kJumpAcc;		// ジャンプ開始
 		}
 	}
-	else if (m_isJumpDown)
-	{
-		m_pos.y += 4.0f;
-
-		if (m_pos.y >= m_fieldY - m_graphSize.y)
-		{
-			m_pos.y = m_fieldY - m_graphSize.y;
-			m_isJumpUp = false;
-			m_isJumpDown = false;
-		}
-	}
+	m_vec.y += kGravity;
 }
 
 void Player::draw()
@@ -80,9 +84,9 @@ void Player::draw()
 bool Player::isCol(Car& car)
 {
 	float playerLeft = getPos().x;
-	float playerRight = getPos().x + getColSize().x;
+	float playerRight = getPos().x + kSizeX;
 	float playerTop = getPos().y;
-	float playerBottom = getPos().y + getColSize().y;
+	float playerBottom = getPos().y + kSizeY;
 
 	float carLeft = car.getPos().x;
 	float carRight = car.getPos().x + car.getSize().x;
