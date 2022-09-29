@@ -47,8 +47,7 @@ private:
 	// 地面の高さ
 	float m_fieldY;
 
-	// ジャンプ関連
 	
-
+	// 死亡判定
 	bool m_isDead;
 };
