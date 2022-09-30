@@ -21,7 +21,10 @@ Car::Car()
 {
 	m_handle = -1;
 	m_fieldY = 0.0f;
-	m_moveType = kMoveTypeNum;
+//	MoveType m_moveType;
+	m_isRestart = 0;
+	m_stopFrame = 0;
+	m_isJump = 0;
 	m_waitFrame = 0;
 }
 
